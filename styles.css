@@ -51,9 +51,46 @@ header{
     top: 0;
     width: 100%
 }
-    
+  
+.header{
+    width: 100%;
+    height: 10vh;
+    margin-top: 13vh;
+}
+    .header h1{
+        margin: 0%;
+        font-size: 5vh;
+        padding-top: 2vh;
+        width: 100%;
+        text-align: center;
+    }
+    .orangeheader{
+        background-color: #f79256;
+    }
+    .purpleheader{
+        margin-top: 0%;
+        background-color: #820263;
+    }
+
+.paragraph{
+    margin: 0%;
+    padding: 1.5%;
+    text-align: center;
+    font-size: large;
+}
+table{
+    text-align: center;
+    font-size: large;
+    margin: 1vh auto 5.5vh auto;
+}
+    td,th{
+        width: max-content;
+        border: 2px solid;
+        padding: 0.5% 2% 0.5% 2%;
+    }
+
 footer{
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     width: 100%;
     height: min-content;
