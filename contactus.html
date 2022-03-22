@@ -16,6 +16,30 @@
             <li><a href="main.html">Home</a></li>           
           </ul>
     </header>
+    <div class="orangeheader header">
+        <h1>Conact Us</h1>
+    </div>
+    <div class="positioningtable">
+    <table>
+        <tr>
+            <td>First Name</td>
+            <td><input type="text" id="firstName"></td>
+        </tr>
+        <tr>
+            <td>Last Name</td>
+            <td><input type="text" id="lastName"></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td><input type="text" id="email"></td>
+        </tr>
+        <tr>
+            <td>What do you want to say?</td>
+        </tr>
+    </table>
+    <textarea class="input" id="textBody" name="paragraph_text" cols="50" rows="10"></textarea>
+    <button onclick="const firstName = document.getElementById('firstName');const lastName = document.getElementById('lastName');const email = document.getElementById('email');const textBody = document.getElementById('textBody');firstName.value = '';lastName.value = '';email.value = '';textBody.value = '';">Enter</button>
+    </div>
     <footer>
         <p>Copyright Zac Ginever 2022 &copy;</p>
         <ul>
