@@ -133,6 +133,55 @@ table{
     background-color: #68064f;
     transition-duration: 0.25s;
 }
+
+.toolbar{
+    width: 20%;
+    height: 83vh;
+    float: left;
+    background-color: white;
+    border-right: 5px solid black;
+    box-sizing: border-box;
+    position: relative;
+}
+    .toolbar input{
+        width: 40%;
+        margin: 0% 30% 0% 30%;
+        text-align: center;
+    }
+    .toolbar p{
+        width: 100%;
+        text-align: center;
+    }
+    .toolbar table{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -22%);
+    }
+    .toolbar button{
+        padding: 0%;
+        background-color: white;
+        border: none;
+    }
+    .toolbar img{
+        height: 15vh;
+    }
+
+.colorwheel{
+    width: 10vmax;
+    border-radius: 50%;
+    margin: 3vh auto 1.5vh auto;
+    height: 10vmax;
+    background-color: red;
+}
+
+.canvas{
+    width: 80%;
+    height: 83vh;
+    float: right;
+    background-color: white;
+}
+
 footer{
     position: fixed;
     bottom: 0px;

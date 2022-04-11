@@ -3,6 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="styles.css">
+<script src="jquery-3.6.0.min.js"></script>
 <title>Canvas</title>
 </head>
 <body>
@@ -16,6 +17,29 @@
             <li><a href="main.html">Home</a></li>           
           </ul>
     </header>
+    <div class="toolbar">
+        <div class="colorwheel" id="colorwheel"></div>
+        <input value="#FF0000" id="colorinput">
+        <p id="colorerror">Invalid Hex code</p> 
+        <table>
+            <tr>
+                <td><button><img src="Resources\Pencil.png" alt="A pencil"></img></button></td>
+                <td><button><img src="Resources\Eraser.png" alt="A eraser"></img></button></td>
+            </tr>
+            <tr>
+                <td><button><img src="Resources\Line tool.png" alt="A line drawer"></img></button></td>
+                <td><button><img src="Resources\Bucket tool.png" alt="A Bucket tool"></img></button></td>
+            </tr>
+            <tr>
+                <td><button><img src="Resources\Circle tool.png" alt="A Circle drawer"></img></button></td>
+                <td><button><img src="Resources\Square tool.png" alt="A square drawer"></img></button></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="canvas" id="canvasdiv">
+        <canvas id="maincanvas">Loading error...</canvas>
+    </div>
     <footer>
         <p>&copy; Zac Ginever 2022</p>
         <ul>
@@ -25,4 +49,32 @@
             <li><div class="linkeninlogo"><a href="https://www.linkedin.com/" target=”_blank”><img src="Resources/Linkedin logo.png" alt="Linkedin logo"></a></div></li>
         </ul>
     </footer>
+    <script>
+        const colorwheel = document.getElementById('colorwheel');
+        const colorinput = document.getElementById('colorinput');
+        const colorerrpr = document.getElementById('colorerror');
+        const maincanvas = document.getElementById('maincanvas');
+        const canvasdiv = document.getElementById('canvasdiv');
+
+        const re = /[0-9A-Fa-f]{6}/g;
+
+        colorerrpr.style.display = 'none';
+
+        maincanvas.width = canvasdiv.clientWidth;
+        maincanvas.height = canvasdiv.clientHeight;
+
+        maincanvas.style["transform"] = scale(2);
+
+        document.onkeypress = function (e) {
+            setTimeout(function(){
+                let color = colorinput.value;
+                if (re.test(color)){
+                    colorerrpr.style.display = 'none';
+                    colorwheel.style.background = color;
+                } else {
+                    colorerrpr.style.display = 'block';
+                }
+            },50);
+        };
+    </script>
 </body>
