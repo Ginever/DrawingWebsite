@@ -19,20 +19,24 @@
     </header>
     <div class="toolbar">
         <div class="colorwheel" id="colorwheel"></div>
-        <input value="#FF0000" id="colorinput">
+        <input value="#FF0000" id="colorinput" oninput="changecolor()">
+        <p>Line width</p>
+        <div class="slidecontainer">
+            <input type="range" min="10" max="100" value="20" class="slider" oninput="ctx.lineWidth = 2**(this.value/10);">
+        </div>
         <p id="colorerror">Invalid Hex code</p> 
         <table>
             <tr>
-                <td><button><img src="Resources\Pencil.png" alt="A pencil"></img></button></td>
-                <td><button><img src="Resources\Eraser.png" alt="A eraser"></img></button></td>
+                <td><button onclick="tooltype = 0;"><img src="Resources\Pencil.png" alt="A pencil"></img></button></td>
+                <td><button onclick="tooltype = 1;"><img src="Resources\Eraser.png" alt="A eraser"></img></button></td>
             </tr>
             <tr>
-                <td><button><img src="Resources\Line tool.png" alt="A line drawer"></img></button></td>
-                <td><button><img src="Resources\Bucket tool.png" alt="A Bucket tool"></img></button></td>
+                <td><button onclick="tooltype = 2;"><img src="Resources\Circle tool.png" alt="A Circle drawer"></img></button></td>
+                <td><button onclick="tooltype = 3;"><img src="Resources\Square tool.png" alt="A square drawer"></img></button></td>
             </tr>
             <tr>
-                <td><button><img src="Resources\Circle tool.png" alt="A Circle drawer"></img></button></td>
-                <td><button><img src="Resources\Square tool.png" alt="A square drawer"></img></button></td>
+                <td><button onclick="tooltype = 4;"><img src="Resources\Line tool.png" alt="A line drawer"></img></button></td>
+                <td><button onclick="ctx.clearRect(0,0,maincanvas.width,maincanvas.height);"><img src="Resources\resetImage.png" alt="A Bucket tool"></img></button></td>
             </tr>
         </table>
     </div>
@@ -52,29 +56,120 @@
     <script>
         const colorwheel = document.getElementById('colorwheel');
         const colorinput = document.getElementById('colorinput');
-        const colorerrpr = document.getElementById('colorerror');
+        const colorerror = document.getElementById('colorerror');
         const maincanvas = document.getElementById('maincanvas');
         const canvasdiv = document.getElementById('canvasdiv');
+        const widthslider = document.getElementById('widthslider');
 
         const re = /[0-9A-Fa-f]{6}/g;
 
-        colorerrpr.style.display = 'none';
+        var ctx = maincanvas.getContext("2d");    
+        var image = new Image();
+        var startpos = {
+            x: 0,
+            y: 0
+        };
+        var endpos = {
+            x: 0,
+            y: 0
+        };
+        var mousedown = false;
+        var tooltype = 0;
+        var color = '#FF0000'
 
+        colorerror.style.display = 'none';
+
+        //set canvas to sorronding div size
         maincanvas.width = canvasdiv.clientWidth;
         maincanvas.height = canvasdiv.clientHeight;
 
-        maincanvas.style["transform"] = scale(2);
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
 
-        document.onkeypress = function (e) {
+        function drawOval(x, y, rw, rh)
+        {   
+            ctx.save();
+            ctx.scale(1,  rh/rw);
+            ctx.beginPath();
+            ctx.arc(x, y/(rh/rw), rw, 0, 2 * Math.PI);
+            ctx.restore();
+            ctx.stroke();  
+        }
+        //colour wheel
+        function changecolor () {
             setTimeout(function(){
-                let color = colorinput.value;
+                color = colorinput.value;
                 if (re.test(color)){
-                    colorerrpr.style.display = 'none';
+                    colorerror.style.display = 'none';
                     colorwheel.style.background = color;
+                    ctx.strokeStyle = color;
                 } else {
-                    colorerrpr.style.display = 'block';
+                    colorerror.style.display = 'block'; 
                 }
             },50);
         };
+
+        //drawing code
+        maincanvas.onmousedown = function (e) {
+            // e = Mouse click event.
+            let rect = e.target.getBoundingClientRect();
+            startpos.x = e.clientX - rect.left; //x position within the element.
+            startpos.y = e.clientY - rect.top;  //y position within the element.
+            mousedown = true;
+            image.src = maincanvas.toDataURL();
+            if (tooltype == 1){
+                ctx.strokeStyle = '#FFFFFF'
+            } else {
+                ctx.strokeStyle = color;
+            }
+        }
+        maincanvas.onmouseup = function (e) {
+            mousedown = false;
+        }
+        maincanvas.onmousemove = function(e) {
+            // e = Mouse click event.
+            if (mousedown){
+            let rect = e.target.getBoundingClientRect();
+            endpos.x = e.clientX - rect.left; //x position within the element.
+            endpos.y = e.clientY - rect.top;  //y position within the element.
+            
+            //draw the stuff based on selected tool
+            ctx.beginPath();
+            switch (tooltype){
+                case 0:
+                    ctx.moveTo(startpos.x, startpos.y);
+                    ctx.lineTo(endpos.x, endpos.y);
+                    startpos.x = endpos.x;
+                    startpos.y = endpos.y;
+                    break;
+                case 1:
+                    ctx.moveTo(startpos.x, startpos.y);
+                    ctx.lineTo(endpos.x, endpos.y);
+                    startpos.x = endpos.x;
+                    startpos.y = endpos.y;
+                    break;
+                case 2:
+                    ctx.clearRect(0,0,maincanvas.width,maincanvas.height)
+                    ctx.drawImage(image, 0, 0);
+                    drawOval(Math.abs((startpos.x+endpos.x)/2), Math.abs((startpos.y+endpos.y)/2), Math.abs((endpos.x-startpos.x)/2), Math.abs((endpos.y-startpos.y)/2));
+                    break;
+                case 3:
+                    ctx.clearRect(0,0,maincanvas.width,maincanvas.height)
+                    ctx.drawImage(image, 0, 0);
+                    ctx.rect(startpos.x,startpos.y,endpos.x-startpos.x,endpos.y-startpos.y)
+                    break;
+                case 4:
+                    ctx.clearRect(0,0,maincanvas.width,maincanvas.height)
+                    ctx.drawImage(image, 0, 0);
+                    ctx.moveTo(startpos.x, startpos.y);
+                    ctx.lineTo(endpos.x, endpos.y);
+                    break;
+
+
+            }
+            ctx.stroke();
+            }
+        }
     </script>
 </body>
