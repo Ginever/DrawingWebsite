@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8" >
 <link rel="stylesheet" href="styles.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <title>Canvas</title>
 </head>
 <body>
     <header class="sticky">
-        <a href="main.html"><img src="Resources/Pencil.png" alt="A pixel pencil"></a>
-        <p>Canvas</p>
+        <a href="index.html"><img src="Resources/Pencil.png" alt="A pixel pencil"></a>
         <ul>
             <li><a href="contactus.html">Contact&nbsp;Us</a></li>
             <li><a href="help.html">Help</a></li>
-            <li><a href="canvas.html">Canvas</a></li>
-            <li><a href="main.html">Home</a></li>           
+            <li><a href="index.html"><b>Canvas</b></a></li>       
           </ul>
     </header>
     <div class="toolbar">
@@ -24,19 +22,18 @@
         <div class="slidecontainer">
             <input type="range" min="10" max="100" value="20" class="slider" oninput="ctx.lineWidth = 2**(this.value/10);">
         </div>
-        <p id="colorerror">Invalid Hex code</p> 
         <table>
             <tr>
-                <td><button title="Pencil tool (p)" id="toolbutton0" onclick="tooltype = 0; updateButton(0);"><img src="Resources\Pencil.png" alt="A pencil"></img></button></td>
-                <td><button title="Eraser tool (e)" id="toolbutton1"onclick="tooltype = 1; updateButton(1)"><img src="Resources\Eraser.png" alt="A eraser"></img></button></td>
+                <td><button title="Pencil tool (p)" id="toolbutton0" onclick="tooltype = 0; updateButton(0);"><img src="Resources/Pencil.png" alt="A pencil"></button></td>
+                <td><button title="Eraser tool (e)" id="toolbutton1" onclick="tooltype = 1; updateButton(1)"><img src="Resources/Eraser.png" alt="A eraser"></button></td>
             </tr>
             <tr>
-                <td><button title="Circle tool (c)" id="toolbutton2" onclick="tooltype = 2; updateButton(2)"><img src="Resources\Circle tool.png" alt="A Circle drawer"></img></button></td>
-                <td><button title="Square tool (s)" id="toolbutton3" onclick="tooltype = 3; updateButton(3)"><img src="Resources\Square tool.png" alt="A square drawer"></img></button></td>
+                <td><button title="Circle tool (c)" id="toolbutton2" onclick="tooltype = 2; updateButton(2)"><img src="Resources/Circle tool.png" alt="A Circle drawer"></button></td>
+                <td><button title="Square tool (s)" id="toolbutton3" onclick="tooltype = 3; updateButton(3)"><img src="Resources/Square tool.png" alt="A square drawer"></button></td>
             </tr>
             <tr>
-                <td><button title="Line tool (l)" id="toolbutton4" onclick="tooltype = 4; updateButton(4)"><img src="Resources\Line tool.png" alt="A line drawer"></img></button></td>
-                <td><button title="Reset button (r)" id="toolbutton5"onclick="ctx.clearRect(0,0,maincanvas.width,maincanvas.height); updateButton(0); tooltype = 0;"><img src="Resources\resetImage.png" alt="A Bucket tool"></img></button></td>
+                <td><button title="Line tool (l)" id="toolbutton4" onclick="tooltype = 4; updateButton(4)"><img src="Resources/Line tool.png" alt="A line drawer"></button></td>
+                <td><button title="Reset button (r)" id="toolbutton5"onclick="ctx.clearRect(0,0,maincanvas.width,maincanvas.height); updateButton(0); tooltype = 0;"><img src="Resources/resetImage.png" alt="A Bucket tool"></button></td>
             </tr>
         </table>
     </div>
@@ -55,7 +52,7 @@
     <footer>
         <p>&copy; Zac Ginever 2022</p>
         <ul>
-            <li><a href="https://www.facebook.com/" target=”_blank”><img src="Resources/facebook logo.png" alt="Facebook logo"></a></li>
+            <li><a href="https://www.facebook.com/" target="_blank”><img src="Resources/facebook logo.png" alt="Facebook logo"></a></li>
             <li><a href="https://www.instagram.com/" target=”_blank”><img src="Resources/Instagram logo.png" alt="Instagram logo"></a></li>
             <li><a href="https://twitter.com/" target=”_blank”><img src="Resources/Twitter logo.png" alt="Twitter logo"></a></li>
             <li><div class="linkeninlogo"><a href="https://www.linkedin.com/" target=”_blank”><img src="Resources/Linkedin logo.png" alt="Linkedin logo"></a></div></li>
@@ -95,8 +92,6 @@
         var tooltype = 0;
         var color = '#FF0000';
 
-        colorerror.style.display = 'none';
-
         //set canvas to sorronding div size
         maincanvas.width = canvasdiv.clientWidth;
         maincanvas.height = canvasdiv.clientHeight;
@@ -119,11 +114,8 @@
             setTimeout(function(){
                 color = colorinput.value;
                 if (re.test(color)){
-                    colorerror.style.display = 'none';
                     colorwheel.style.background = color;
                     ctx.strokeStyle = color;
-                } else {
-                    colorerror.style.display = 'block'; 
                 }
             },50);
         };
