@@ -3,7 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="styles.css">
-<script src="jquery-3.6.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <title>Canvas</title>
 </head>
 <body>
@@ -27,16 +27,16 @@
         <p id="colorerror">Invalid Hex code</p> 
         <table>
             <tr>
-                <td><button onclick="tooltype = 0;"><img src="Resources\Pencil.png" alt="A pencil"></img></button></td>
-                <td><button onclick="tooltype = 1;"><img src="Resources\Eraser.png" alt="A eraser"></img></button></td>
+                <td><button title="Pencil tool (p)" id="toolbutton0" onclick="tooltype = 0; updateButton(0);"><img src="Resources\Pencil.png" alt="A pencil"></img></button></td>
+                <td><button title="Eraser tool (e)" id="toolbutton1"onclick="tooltype = 1; updateButton(1)"><img src="Resources\Eraser.png" alt="A eraser"></img></button></td>
             </tr>
             <tr>
-                <td><button onclick="tooltype = 2;"><img src="Resources\Circle tool.png" alt="A Circle drawer"></img></button></td>
-                <td><button onclick="tooltype = 3;"><img src="Resources\Square tool.png" alt="A square drawer"></img></button></td>
+                <td><button title="Circle tool (c)" id="toolbutton2" onclick="tooltype = 2; updateButton(2)"><img src="Resources\Circle tool.png" alt="A Circle drawer"></img></button></td>
+                <td><button title="Square tool (s)" id="toolbutton3" onclick="tooltype = 3; updateButton(3)"><img src="Resources\Square tool.png" alt="A square drawer"></img></button></td>
             </tr>
             <tr>
-                <td><button onclick="tooltype = 4;"><img src="Resources\Line tool.png" alt="A line drawer"></img></button></td>
-                <td><button onclick="ctx.clearRect(0,0,maincanvas.width,maincanvas.height);"><img src="Resources\resetImage.png" alt="A Bucket tool"></img></button></td>
+                <td><button title="Line tool (l)" id="toolbutton4" onclick="tooltype = 4; updateButton(4)"><img src="Resources\Line tool.png" alt="A line drawer"></img></button></td>
+                <td><button title="Reset button (r)" id="toolbutton5"onclick="ctx.clearRect(0,0,maincanvas.width,maincanvas.height); updateButton(0); tooltype = 0;"><img src="Resources\resetImage.png" alt="A Bucket tool"></img></button></td>
             </tr>
         </table>
     </div>
@@ -44,6 +44,14 @@
     <div class="canvas" id="canvasdiv">
         <canvas id="maincanvas">Loading error...</canvas>
     </div>
+    <div id='helpsidebar' class="helpsidebar">
+        <h1>Key Binds</h1>
+        <p>To find the keybind of a key leave the mouse in one spot over it and a message should pop up descirbing what it does and it's key bind</p>
+        <h1 style="margin-top: 2vw;">Basic Use</h1>
+        <p>To use click on a tool and use it by clicking on the canvas and draging the mouse around to create art</p>
+        <p>For more infomation go to the <a href="help.html">Help Page</a></p>
+    </div>
+    <button class="helpicon" onclick="helpbuttonclicked();"><p>?</p></button>
     <footer>
         <p>&copy; Zac Ginever 2022</p>
         <ul>
@@ -60,6 +68,13 @@
         const maincanvas = document.getElementById('maincanvas');
         const canvasdiv = document.getElementById('canvasdiv');
         const widthslider = document.getElementById('widthslider');
+        const toolbutton0 = document.getElementById('toolbutton0');
+        const toolbutton1 = document.getElementById('toolbutton1');
+        const toolbutton2 = document.getElementById('toolbutton2');
+        const toolbutton3 = document.getElementById('toolbutton3');
+        const toolbutton4 = document.getElementById('toolbutton4');
+        const toolbutton5 = document.getElementById('toolbutton5');
+        const helpsidebar = document.getElementById('helpsidebar');
 
         const re = /[0-9A-Fa-f]{6}/g;
 
@@ -73,9 +88,12 @@
             x: 0,
             y: 0
         };
+
+        var id = null;
+        var sidebaractive = false;
         var mousedown = false;
         var tooltype = 0;
-        var color = '#FF0000'
+        var color = '#FF0000';
 
         colorerror.style.display = 'none';
 
@@ -109,6 +127,106 @@
                 }
             },50);
         };
+        function rgb2hex(rgb) {
+            rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+            function hex(x) {
+                return ("0" + parseInt(x).toString(16)).slice(-2);
+            }
+            return [parseInt(hex(rgb[1]),16), parseInt(hex(rgb[2]),16), parseInt(hex(rgb[3]),16)];
+        }
+        function updateButton(x){
+            toolbutton0.style.background = '#FFFFFF';
+            toolbutton1.style.background = '#FFFFFF';
+            toolbutton2.style.background = '#FFFFFF';
+            toolbutton3.style.background = '#FFFFFF';
+            toolbutton4.style.background = '#FFFFFF';
+            toolbutton5.style.background = '#FFFFFF';
+            switch (x){
+                case 0:
+                    toolbutton0.style.background = '#f79256';
+                    break;
+                case 1:
+                    toolbutton1.style.background = '#f79256';
+                    break;
+                case 2:
+                    toolbutton2.style.background = '#f79256';
+                    break;
+                case 3:
+                    toolbutton3.style.background = '#f79256';
+                    break;
+                case 4:
+                    toolbutton4.style.background = '#f79256';
+                    break;
+            }
+        }
+        function helpbuttonclicked() {
+            if (sidebaractive){
+                var pos = 0;
+                helpicon = $('.helpicon');
+                clearInterval(id);
+                id = setInterval(function() {
+                    if (pos == -20) {
+                        clearInterval(id);
+                        console.log(id);
+                    } else {
+                        pos--
+                        helpsidebar.style.right = (pos)+'%'
+                        helpicon.css({'opacity':(100+(pos*2.5))+'%','margin-right': (8*25/screen.width)+(pos*(25/screen.width*0.4))+25 + 'px'})
+                    }
+                }, 10);
+                sidebaractive = false;
+            } else {
+                var pos = 0;
+                helpicon = $('.helpicon');
+                clearInterval(id);
+                id = setInterval(function() {
+                    if (pos == 20) {
+                        clearInterval(id);
+                        console.log(id);
+                    } else {
+                        pos++
+                        helpsidebar.style.right = (pos-20)+'%'
+                        helpicon.css({'opacity':(50+(pos*2.5))+'%','margin-right': (((8-(25/screen.width))/20)*pos) + 'vw'})
+                    }
+                }, 10);
+                sidebaractive = true;
+            }
+        }
+
+
+        //broken animate on mouse over code
+        /*toolbutton0.onmouseenter = function(){
+            if (toolbuttondata.zero){
+                rgb = rgb2hex($(toolbutton0).css('background-color'))
+                clearInterval(toolbuttonanmi0);
+                pos1 = rgb[0];
+                pos2 = rgb[1];
+                pos3 = rgb[2];
+                toolbuttonanmi0 = setInterval(function (){
+                    if (pos1 > 247){pos1--;}
+                    if (pos2 > 146){pos2--;}
+                    if (pos3 > 86){pos3--;} 
+                    else {clearInterval(toolbuttonanmi0);}
+                    toolbutton0.style.background = '#' + (pos1.toString(16) + pos2.toString(16) + pos3.toString(16));               
+                },1);
+            }
+
+        }
+        toolbutton0.onmouseleave = function(){
+            if (toolbuttondata.zero){
+                rgb = rgb2hex($(toolbutton0).css('background-color'))
+                clearInterval(toolbuttonanmi0);
+                pos1 = rgb[0];
+                pos2 = rgb[1];
+                pos3 = rgb[2];
+                toolbuttonanmi0 = setInterval(function (){
+                    if (pos1 < 255){pos1++;}
+                    if (pos2 < 255){pos2++;}
+                    if (pos3 < 255){pos3++;} else {clearInterval(toolbuttonanmi0);}
+                    toolbutton0.style.background = '#' + (pos1.toString(16) + pos2.toString(16) + pos3.toString(16));               
+                },1);
+            }
+        }*/
 
         //drawing code
         maincanvas.onmousedown = function (e) {
@@ -171,5 +289,33 @@
             ctx.stroke();
             }
         }
+        $(document).on("keypress", function (e) {
+            if (!($(".toolbar input").is(":focus"))){
+                console.log('hi')
+                if (e.key == 'p'){
+                    tooltype = 0;
+                    updateButton(0)
+                } if (e.key == 'e'){
+                    tooltype = 1;
+                    updateButton(1);
+                } if (e.key == 'c'){
+                    tooltype = 2;
+                    updateButton(2);
+                } if (e.key == 's'){
+                    tooltype = 3;
+                    updateButton(3);
+                } if (e.key == 'l'){
+                    tooltype = 4;
+                    updateButton(4);
+                } if (e.key == 'r'){
+                    ctx.clearRect(0,0,maincanvas.width,maincanvas.height); 
+                    updateButton(0);
+                    tooltype = 0;
+                }
+        }
+        });
+
+        helpsidebar.style.right = '-20%';
+        updateButton(0)
     </script>
 </body>
